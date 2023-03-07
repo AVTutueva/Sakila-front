@@ -3,25 +3,7 @@ import FilmTable from "./Films/FilmTable";
 import Context from "./Films/context";
 import AddFilm from "./Films/AddFilm";
 import axios from "axios";
-
-const categories = {
-  Action: 1,
-  Animation: 2,
-  Children: 3,
-  Classics: 4,
-  Comedy: 5,
-  Documentary: 6,
-  Drama: 7,
-  Family: 8,
-  Foreign: 9,
-  Games: 10,
-  Horror: 11,
-  Music: 12,
-  New: 13,
-  "Sci-Fi": 14,
-  Sports: 15,
-  Travel: 16,
-};
+import { categories } from "./Films/Categories";
 
 function App() {
   const [films, setFilms] = React.useState({});
