@@ -27,6 +27,7 @@ function App() {
     );
   }, []);
 
+  // temporary comment
   // removing the film
   function removeFilm(id) {
     const request_to_delete = `${apiUrl}/films${id}`;
