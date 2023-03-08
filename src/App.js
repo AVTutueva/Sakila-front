@@ -2,14 +2,17 @@ import React, { useEffect } from "react";
 import FilmTable from "./Films/FilmTable";
 import Context from "./Films/context";
 import AddFilm from "./Films/AddFilm";
-import axios from "axios";
+import Axios from "axios";
 import { categories } from "./Films/Categories";
+import { apiUrl } from "./config/constants";
 
 function App() {
   const [films, setFilms] = React.useState({});
 
   useEffect(() => {
-    axios.get("http://localhost:8080/films").then((response) =>
+
+
+    Axios.get(`${apiUrl}/films`).then((response) =>
       setFilms(
         response.data.map(function (element) {
           const new_film = {
@@ -26,7 +29,7 @@ function App() {
 
   // removing the film
   function removeFilm(id) {
-    const request_to_delete = `http://localhost:8080/films/${id}`;
+    const request_to_delete = `${apiUrl}/films${id}`;
     fetch(request_to_delete, {
       method: "DELETE",
       headers: { "content-type": "application/json" },
@@ -70,7 +73,7 @@ function App() {
       ],
     };
 
-    fetch("http://localhost:8080/films/", {
+    fetch(`${apiUrl}/films`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
