@@ -4,13 +4,13 @@ import Context from "./Films/context";
 import AddFilm from "./Films/AddFilm";
 import Axios from "axios";
 import { categories } from "./Films/Categories";
-import { apiUrl } from "./config/constants";
+import { apiUrl, apiUrl_ktor } from "./config/constants";
 
 function App() {
   const [films, setFilms] = React.useState({});
+  const [categories_new, setCategories] = React.useState({});
 
   useEffect(() => {
-
 
     Axios.get(`${apiUrl}/films`).then((response) =>
       setFilms(
@@ -21,16 +21,31 @@ function App() {
             description: element.Description,
             year: element.ReleaseYear,
           };
+          //console.log(new_film)
           return new_film;
         })
       )
     );
+
+    Axios.get(`${apiUrl_ktor}/categories`).then((response) =>
+    setCategories(
+        response.data.map(function (element) {
+          const new_category = {
+            id: element.id,
+            name: element.name,
+            updateDate: element.updateDate,
+            useRef: element.useRef
+          };
+          return new_category;
+        })
+      )
+    );
+
   }, []);
 
-  // temporary comment
-  // removing the film
+    // removing the film
   function removeFilm(id) {
-    const request_to_delete = `${apiUrl}/films${id}`;
+    const request_to_delete = `${apiUrl}/films/${id}`;
     fetch(request_to_delete, {
       method: "DELETE",
       headers: { "content-type": "application/json" },
@@ -52,8 +67,8 @@ function App() {
 
   // adding a new film
   function addFilm(state) {
-    console.log(categories[state.category]);
-    console.log(state.category);
+    //console.log(categories[state.category]);
+    //console.log(state.category);
     const jsonFilm = {
       Title: state.title,
       Description: state.description,
@@ -109,7 +124,7 @@ function App() {
     <Context.Provider value={{ removeFilm }}>
       <div className="wrapper">
         <h1>List of films</h1>
-        <AddFilm onCreate={addFilm} />
+        <AddFilm categories_new={categories_new} onCreate={addFilm} />
         {films.length ? <FilmTable films={films} /> : <p>No films to show</p>}
       </div>
     </Context.Provider>

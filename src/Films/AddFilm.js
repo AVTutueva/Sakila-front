@@ -1,14 +1,18 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
-import { categories } from "./Categories";
+// import { categories } from "./Categories";
 
+function AddFilm(props) {
 
-function AddFilm({ onCreate }) {
+  const options = props.categories_new.length > 0 ? (props.categories_new) : ""
+  console.log("my options", options)
+
   const [state, setValue] = useState({
     title: "",
     description: "",
     year: "",
-    category: Object.keys(categories)[0]
+    category: "==Category=="
+    //category: props.categories_new.length > 0 ? (props.categories_new[0].name) : ""
   });
 
   function handleChange(event) {
@@ -25,7 +29,7 @@ function AddFilm({ onCreate }) {
     const error = {status: false, error: ""} 
     if (!state.title.trim()) {
       error.status = true
-      error.error = "Titile is empty"
+      error.error = "Title is empty"
       return error 
     }
     if (!state.description.trim()) {
@@ -43,6 +47,13 @@ function AddFilm({ onCreate }) {
       error.error = "Year must be 4 digits"
       return error
     }
+    if (state.category === "==Category=="){
+      error.status = true
+      error.error = "Please, choose category"
+      return error
+    }
+
+
     return error
   }
 
@@ -50,7 +61,7 @@ function AddFilm({ onCreate }) {
     event.preventDefault();
     const error = checkInputs(state)
     if (!error.status) {
-      onCreate(state);
+      props.onCreate(state);
       setValue({title: "", description: "", year: ""})
     }
     else{
@@ -83,19 +94,26 @@ function AddFilm({ onCreate }) {
       </label>
       <label>
       Category: <br/>
-        <select name="category" onChange={handleChange}>
-        {Object.keys(categories).map((elem) => (<option>{elem}</option>))}
-        </select>
+
+
+      <select name="category" onChange={handleChange} defaultValue={props.categories_new.length > 0 ? (props.categories_new[0].name) : ""}>
+      <option>==Category==</option>
+      {props.categories_new.length > 0 ? props.categories_new.map((elem, id) => (<option value={elem.name} key={elem.id}>{elem.name}</option>)) : ""}
+ 
+      </select>
       </label>
       <br/>
  
       <button type="submit">Add</button>
     </form>
   );
+
+  //
 }
 
 AddFilm.propTypes = {
-    onCreate: PropTypes.func.isRequired
-}
+  categories_new: PropTypes.arrayOf(PropTypes.object).isRequired,
+  onCreate: PropTypes.func.isRequired,
+};
 
 export default AddFilm;

@@ -3,6 +3,7 @@ import SingleFilm from "./Film";
 import PropTypes from "prop-types";
 
 function FilmTable(props) {
+
   return (
     <table>
     <tbody>
